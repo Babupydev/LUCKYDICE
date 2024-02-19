@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Game History</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        
+        header {
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        section {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        
+        .game-result {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
+            text-align: center;
+            width: 200px;
+        }
+        
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Game History</h1>
+    </header>
+
+    <section id="game-history">
+        <!-- Display game history here using JavaScript -->
+    </section>
+
+    <footer>
+        <p>&copy; 2023 @LuckyDiceGame. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Assume gameHistoryData is an array containing game history objects
+            const gameHistoryData = [{
+                    result: 'Win',
+                    timestamp: '07-12-2023 14:30'
+                }, {
+                    result: 'Loss',
+                    timestamp: '07-12-2023 20:15'
+                },
+                // Add more game history data as needed
+            ];
+
+            const gameHistorySection = document.getElementById('game-history');
+
+            // Loop through the game history data and create elements to display
+            gameHistoryData.forEach(historyItem => {
+                const gameResultElement = document.createElement('div');
+                gameResultElement.classList.add('game-result');
+                gameResultElement.textContent = `${historyItem.result} - ${historyItem.timestamp}`;
+
+                gameHistorySection.appendChild(gameResultElement);
+            });
+        });
+    </script>
+</body>
+
+</html>
