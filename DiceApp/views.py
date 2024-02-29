@@ -13,6 +13,8 @@ from datetime import datetime
 from .models import DepositMessage
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from Authentication.views import signup, signin, signout, activate, forgot_password, reset_password, password_reset_sucess
+
 
 # Create your views here.
 def index(request):
@@ -24,33 +26,50 @@ def practice_game(request):
 def About(request):
     return render(request, "DiceApp/about.html")
 
-
 def How_to_play(request):
     return render(request, "DiceApp/how-to-play.html")
 
-
 # Login Authontication
-class register(View):
-    def get(self, request):
-        form = UserregistrationForm()
-        return render(request, "DiceApp/registration.html", locals())
+def login(request):
+    return signin(request)
 
-    def post(self, request):
-        form = UserregistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Congratulations ! user register Successfully")
-        else:
-            messages.warning(request, "invalid input Data")
-        return render(request, "DiceApp/registration.html", locals())
+def signup_view(request):
+    return signup(request)
+
+def logout(request):
+    return signout(request)
+
+def account_activate(request):
+    return activate(request)
+
+def forgot_password(request):
+    return forgot_password(request)
+
+def reset_password(request):
+    return reset_password(request)
+
+def reset_password_success(request):
+    return reset_password_success(request)
+
+# class register(View):
+#     def get(self, request):
+#         form = UserregistrationForm()
+#         return render(request, "DiceApp/registration.html", locals())
+
+#     def post(self, request):
+#         form = UserregistrationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, "Congratulations ! user register Successfully")
+#         else:
+#             messages.warning(request, "invalid input Data")
+#         return render(request, "DiceApp/registration.html", locals())
 
 
-def user_login(request):
-    return render(request, "DiceApp/login.html")
-
+# def user_login(request):
+#     return render(request, "DiceApp/login.html")
 
 # User-Profile section
-
 
 class ProfileView(View):
     template_name = "DiceApp/1.html"
@@ -106,7 +125,6 @@ class User_profile(View):
 
 # For User Profile-setting
 
-
 class ProfileSettingsView(View):
     template_name = "DiceApp/profile-setting.html"
 
@@ -138,7 +156,6 @@ class ProfileSettingsView(View):
 
 from decimal import Decimal
 from django.shortcuts import render
-
 
 def Mybalance(request, balance=None):
     if request.method == "GET":
@@ -175,7 +192,6 @@ def Profile_settings(request):
 def Inbox(request):
     deposit_messages = DepositMessage.objects.all()
     return render(request, 'DiceApp/inbox.html', {'deposit_messages': deposit_messages})
-
 
 # Deposit sucess
 from django.contrib.auth.decorators import login_required
@@ -276,7 +292,8 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from instamojo_wrapper import Instamojo
 from .models import Wallet
-
+from decimal import Decimal
+import razorpay
 
 @login_required
 def initiate_payment(request):
@@ -390,64 +407,7 @@ def success(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)})
- 
-
-# from decimal import Decimal
-# from django.shortcuts import render, redirect
-# from django.contrib.auth.decorators import login_required
-# from django.conf import settings
-# from .models import Wallet
-# from instamojo_wrapper import Instamojo
-
-
-# @login_required
-# def success(request):
-#     user = request.user
-
-#     # Check if the user has a wallet
-#     try:
-#         wallet = Wallet.objects.get(user=user)
-#     except Wallet.DoesNotExist:
-#         return JsonResponse({"error": "Wallet not found for the user"})
-
-#     # Get payment request details
-#     payment_request_id = request.GET.get("payment_request_id")
-#     api = Instamojo(
-#         api_key=settings.API_KEY,
-#         auth_token=settings.AUTH_TOKEN,
-#         endpoint="https://test.instamojo.com/api/1.1/",
-#     )
-
-#     try:
-#         payment_request = api.payment_request_status(payment_request_id)
-
-#         # Check if 'status' key is present in the response
-#         if (      
-#             "payment_request" in payment_request
-#             and "status" in payment_request["payment_request"]
-#         ):
-#             if payment_request["payment_request"]["status"] == "Completed":
-#                 # Update wallet balance
-#                 wallet.balance += Decimal(payment_request["payment_request"]["amount"])
-#                 wallet.save()
-
-#                 # Redirect to the success page with the updated balance
-#                 return redirect("success_page", balance=wallet.balance)
-#             else:
-#                 return JsonResponse(
-#                     {
-#                         "error": f"Payment status is not 'Completed'. Actual status: {payment_request['payment_request']['status']}"
-#                     }
-#                 )
-#         else:
-#             return JsonResponse(
-#                 {"error": "Unexpected response structure from Instamojo"}
-#             )
-
-#     except Exception as e:
-#         return JsonResponse({"error": str(e)})
-# messages.success(f'Deposit of ₹{"amount"} was successful on {datetime.now()}.')
-
+    
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .models import Wallet
@@ -651,3 +611,121 @@ def bank_details(request):
 
 def upi_details_page(request):
     return render(request, 'DiceApp/upi_details_page.html')
+
+# Razorpay Payment integration start
+
+
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.conf import settings
+from .models import Wallet, DepositMessage
+from decimal import Decimal
+from datetime import datetime
+import razorpay
+
+@login_required
+def initiate_razorpay_payment(request):
+    if request.method == "POST":
+        user = request.user
+        wallet, created = Wallet.objects.get_or_create(user=user)
+        amount = request.POST.get("amount")
+
+        # Validate the amount if needed
+        if not amount or not amount.isdigit():
+            return JsonResponse({"error": "Invalid amount"})
+
+        # Initialize Razorpay client with API key and secret key
+        client = razorpay.Client(auth=(settings.rzp_test_AigyCc6s5GehQ0, settings.W5qsSkr2pZAcBoTpdoTKMlfd))
+
+        try:
+            # Create Razorpay order
+            order = client.order.create({
+                'amount': int(amount) * 100,  # Amount should be in paisa
+                'currency': 'INR',
+                'payment_capture': 1  # Auto capture payment
+            })
+
+            # Save order ID in session for reference during success callback
+            request.session['razorpay_order_id'] = order['id']
+
+            return JsonResponse({"order_id": order['id']})
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)})
+
+    return JsonResponse({"error": "Method not allowed"})
+
+
+@login_required
+def razorpay_callback(request):
+    user = request.user
+
+    # Check if the Razorpay order ID is present in the session
+    if 'razorpay_order_id' in request.session:
+        order_id = request.session.pop('razorpay_order_id')
+    else:
+        return JsonResponse({"error": "Razorpay order ID not found in session"})
+
+    # Fetch Razorpay order details using the order ID
+    client = razorpay.Client(auth=(settings.rzp_test_AigyCc6s5GehQ0, settings.W5qsSkr2pZAcBoTpdoTKMlfd))
+    try:
+        order = client.order.fetch(order_id)
+
+        # Check if the payment is successful
+        if order.get('status') == 'paid':
+            # Update wallet balance
+            wallet, created = Wallet.objects.get_or_create(user=user)
+            deposited_amount = Decimal(order['amount']) / 100  # Convert amount from paisa to rupees
+            wallet.balance += deposited_amount
+            wallet.save()
+
+            # Save deposit message to the model
+            DepositMessage.objects.create(user=user, message=f'Deposit of ₹{deposited_amount} was successful on {datetime.now()}.')
+
+            # Display success message
+            messages.success(request, f'Deposit of ₹{deposited_amount} was successful on {datetime.now()}.')
+
+            # Redirect to the success page with the updated balance
+            return redirect("success_page", balance=wallet.balance)
+
+        else:
+            return JsonResponse({"error": "Payment not successful"})
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)})
+
+# For Withdraw Amount
+
+# views.py
+
+from django.http import JsonResponse
+import razorpay
+
+@login_required
+def withdraw(request):
+    client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+
+    if request.method == 'POST':
+        amount = request.POST.get('amount')
+        recipient = request.POST.get('recipient')
+
+        # Create a Razorpay payout
+        payout_data = {
+            'account_number': recipient.account_number,
+            'fund_account_id': 'YOUR_RAZORPAY_FUND_ACCOUNT_ID',
+            'amount': amount * 100,  # Amount should be in paise
+            'currency': 'INR',
+            'mode': 'NEFT',
+            'purpose': 'refund',
+            'queue_if_low_balance': True
+        }
+
+        try:
+            payout = client.payouts.create(data=payout_data)
+            return JsonResponse({'success': True, 'payout': payout})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+

@@ -43,4 +43,4 @@ class ProfileSettingsForm(forms.ModelForm):
         self.fields['balance'].widget.attrs.update({'class': 'form-control'})
         self.fields['inbox_notification'].widget.attrs.update({'class': 'form-control'})
 
-   
+ 

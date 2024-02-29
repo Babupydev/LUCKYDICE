@@ -11,9 +11,17 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from . info import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+EMAIL_USE_TLS = EMAIL_USE_TLS
+EMAIL_HOST = EMAIL_HOST
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+EMAIL_PORT = EMAIL_PORT
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -39,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'DiceApp',
     'rest_framework',
+    'Authentication',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +141,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 API_KEY = "test_bd4e91fe6cf86520e280ca95430"
 AUTH_TOKEN = "test_e3eddc2ab520fc368cf285aafeb"
 SALT = "c3e578ddb2604a1c8fea595038ef7d32"
+
+# Razorpay
+RAZORPAY_KEY_ID = 'rzp_test_AigyCc6s5GehQ0'
+RAZORPAY_KEY_SECRET = 'W5qsSkr2pZAcBoTpdoTKMlfd'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DEFAULT_FROM_EMAIL = 'Qualdedigital.for.add2012@gmail.com'

@@ -6,7 +6,7 @@ from django.contrib.auth import views as auth_view
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 
-from .forms import LoginForm, MyPasswordResetForm
+# from .forms import LoginForm, MyPasswordResetForm
 from .views import BetListCreateView, GameResultListCreateView, WalletListCreateView
 
 urlpatterns = [
@@ -14,21 +14,28 @@ urlpatterns = [
     path("About/", views.About, name="about"),
     path("How-to-play/", views.How_to_play, name="How-to-play"),
     path("practice_game/", views.practice_game, name="practice_game"),
-    path("register/", views.register.as_view(), name="register"),
-    path(
-        "accounts/login/",
-        auth_view.LoginView.as_view(
-            template_name="DiceApp/login.html", authentication_form=LoginForm
-        ),
-        name="login",
-    ),
-    path(
-        "password-reset/",
-        auth_view.PasswordResetView.as_view(
-            template_name="app/password_reset.html", form_class=MyPasswordResetForm
-        ),
-        name="password_reset",
-    ),
+    path("login", views.login,name="login"),
+    path("signup_view", views.signup_view,name="signup_view"),
+    path("logout", views.logout,name="logout"),
+    path("account_activate", views.account_activate,name="account_activate"),
+    path("forgot_password", views.forgot_password,name="forgot_password"),
+    path("reset_password", views.reset_password,name="reset_password"),
+    path("reset_password_success", views.reset_password_success,name="reset_password_success"),
+    # path("register/", views.register.as_view(), name="register"),
+    # path(
+    #     "accounts/login/",
+    #     auth_view.LoginView.as_view(
+    #         template_name="DiceApp/login.html", authentication_form=LoginForm
+    #     ),
+    #     name="login",
+    # ),
+    # path(
+    #     "password-reset/",
+    #     auth_view.PasswordResetView.as_view(
+    #         template_name="app/password_reset.html", form_class=MyPasswordResetForm
+    #     ),
+    #     name="password_reset",
+    # ),
     path("profile/", views.ProfileView.as_view(), name="profile"),
     path("User_profile/", views.User_profile.as_view(), name="User_profile"),
     path(
@@ -61,6 +68,12 @@ urlpatterns = [
     path('api/bets/', BetListCreateView.as_view(), name='bet-list-create'),
     path('api/wallets/', WalletListCreateView.as_view(), name='wallet-list-create'),
     path('api/game-results/', GameResultListCreateView.as_view(), name='game-result-list-create'),
+    
+    # Razorpay payment
+    path('initiate-razorpay-payment/', views.initiate_razorpay_payment, name='initiate_razorpay_payment'),
+    path('razorpay-callback/', views.razorpay_callback, name='razorpay_callback'),
+     
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
