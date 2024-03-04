@@ -20,8 +20,8 @@ from Authentication.views import signup, signin, signout, activate, forgot_passw
 def index(request):
     return render(request, "DiceApp/index.html")
 
-def practice_game(request):
-    return render(request, "DiceApp/index.html")
+def PracticeGame(request):
+    return render(request, "DiceApp/practicegamecode.html")
 
 def About(request):
     return render(request, "DiceApp/about.html")

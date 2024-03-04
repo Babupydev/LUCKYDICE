@@ -13,7 +13,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("About/", views.About, name="about"),
     path("How-to-play/", views.How_to_play, name="How-to-play"),
-    path("practice_game/", views.practice_game, name="practice_game"),
+    path("Practice-Ggame/", views.PracticeGame, name="PracticeGame"),
     path("login", views.login,name="login"),
     path("signup_view", views.signup_view,name="signup_view"),
     path("logout", views.logout,name="logout"),
@@ -21,21 +21,6 @@ urlpatterns = [
     path("forgot_password", views.forgot_password,name="forgot_password"),
     path("reset_password", views.reset_password,name="reset_password"),
     path("reset_password_success", views.reset_password_success,name="reset_password_success"),
-    # path("register/", views.register.as_view(), name="register"),
-    # path(
-    #     "accounts/login/",
-    #     auth_view.LoginView.as_view(
-    #         template_name="DiceApp/login.html", authentication_form=LoginForm
-    #     ),
-    #     name="login",
-    # ),
-    # path(
-    #     "password-reset/",
-    #     auth_view.PasswordResetView.as_view(
-    #         template_name="app/password_reset.html", form_class=MyPasswordResetForm
-    #     ),
-    #     name="password_reset",
-    # ),
     path("profile/", views.ProfileView.as_view(), name="profile"),
     path("User_profile/", views.User_profile.as_view(), name="User_profile"),
     path(

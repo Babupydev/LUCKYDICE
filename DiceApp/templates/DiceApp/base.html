@@ -36,7 +36,10 @@
 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Practice Game</a>
+                        <a class="nav-link" href="{% url 'profile' %}">Start Game</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'PracticeGame' %}">Practice Game</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'How-to-play' %}">How to Play</a>
@@ -55,7 +58,7 @@
         </div>
 
     </nav>
-    {% block banner-slider %} {% endblock banner-slider %} {% block main-content %} {% endblock main-content %} {% include 'DiceApp/contactus.html' %}
+    {% block banner-slider %} {% endblock banner-slider %} {% block main-content %} {% endblock main-content %} {% include 'DiceApp/contactus.html' %} {% include "DiceApp/footer.html" %}
 
 
     <!-- Bootstrap JS -->

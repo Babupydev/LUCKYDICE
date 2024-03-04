@@ -1,0 +1,705 @@
+{% load static %} 
+<!DOCTYPE html> 
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Dice</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Lucky Dice Game</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <style>
+        body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 800px; /* Adjusted max-width */
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.wallet-container {
+    background: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    color: white;
+    margin-bottom: 20px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.table th {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    text-align: center;
+}
+
+.table td {
+    padding: 8px;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.game-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #000;
+    font-size: 2em;
+    margin: 20px 0;
+}
+
+.countdown-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+#countdown {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #4caf50;
+    margin-bottom: 10px;
+    animation: pulse 1s infinite;
+}
+
+.game-history-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#game-history {
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    color: red;
+}
+
+#game-history h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #4caf50;
+    font-size: 1.5em;
+}
+
+#round-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+/* Add your remaining styles here */
+
+/* ... */
+
+.floating-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.practice-game-btn {
+    margin-right: 10px;
+}
+
+    
+        .round-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    
+        .round-number {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    
+        .dice-history {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border: 2px solid #4caf50;
+            border-radius: 4px;
+        }
+    
+        .game-container {
+            width: 60%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            margin-left: 80px;
+            border: 2px solid red;
+            padding: 20px;
+            background-color: #DAF7A6;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+    
+        .dice {
+            width: 80px;
+            height: 80px;
+            margin: 5px;
+            border: 2px solid #333;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+    
+        .dice-selected {
+            box-shadow: 0 0 8px red;
+        }
+    
+        #message {
+            margin-top: 10px;
+            color: #4caf50;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.2em;
+        }
+    
+        #result {
+            margin-top: 20px;
+            text-align: center;
+            color: #4caf50;
+            font-size: 1.2em;
+        }
+    
+        #result-images {
+            display: flex;
+            justify-content: center;
+        }
+    
+        #congratulations,
+        #sorry {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: #4caf50;
+            font-size: 1.2em;
+        }
+    
+        .betting-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 5px;
+            text-align: center;
+            gap: 10px;
+        }
+    
+        .bet-amount:hover {
+            transform: scale(1.1);
+        }
+    
+        .choose-amount-btn {
+            padding: 10px 15px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+    
+        .choose-amount-btn:hover {
+            background-color: #455aa0;
+        }
+    
+        .bet-amount:hover {
+            border: 1px solid #ffd900;
+            transform: scale(1.1);
+        }
+    
+        .bet-amount {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1em;
+            border-radius: 10%;
+            border: 1px solid #000;
+            cursor: pointer;
+            transition: transform 0.8s ease-in-out;
+        }
+    
+        .selected {
+            border-color: #45A049 !important;
+        }
+    
+        .selected-bet {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1em;
+            color: #333;
+            color: #4caf50;
+            font-weight: bold;
+        }
+    
+        .selected-bet p {
+            margin: 0;
+        }
+    
+        .selected-bet span {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+    
+        @media (max-width: 768px) {
+            .game-container {
+                width: 90%;
+            }
+        }
+    
+        @media (max-width: 576px) {
+            .game-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+    
+    
+    
+</head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Dice Game</title>
+    <link rel="stylesheet" href="your-stylesheet.css">
+</head>
+<body>
+    <div class="container">
+        <div class="wallet-container card">
+            <!-- Wallet content -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="2">Virtual Wallet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Balance:</td>
+                        <td><span id="walletBalance">100</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button class="btn btn-primary" id="add" onclick="addMoney()">Add Money</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="game-info">
+            <h1 class="text-center">Lucky Dice Game</h1>
+            <div class="countdown-container">
+                <div id="countdown" style="opacity: 0%;">Time Left: 20s</div>
+                <div id="game-history-container">
+                    <!-- Right container for Game History -->
+                    <div id="game-history">
+                        <h2>Game History</h2>
+                        <ul id="round-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="game-container">
+            <!-- Your dice images go here -->
+            <img id="img1" src="{% static 'DiceApp/images/lion.png' %}" alt="lion" class="dice" onclick="selectImage('lion.png', this)">
+            <img id="img2" src="{% static 'DiceApp/images/horse.png' %}" alt="horse" class="dice" onclick="selectImage('horse.png', this)">
+            <img id="img2" src="{% static 'DiceApp/images/monkey.png' %}" alt="monkey" class="dice" onclick="selectImage('monkey.png', this)">
+            <img id="img3" src="{% static 'DiceApp/images/panda.png' %}" alt="panda" class="dice" onclick="selectImage('panda.png', this)">
+            <img id="img4" src="{% static 'DiceApp/images/deer.png' %}" alt="deer" class="dice" onclick="selectImage('deer.png', this)">
+            <img id="img5" src="{% static 'DiceApp/images/elephant.png' %}" alt="elephant" class="dice" onclick="selectImage('elephant.png', this)">
+        </div>
+        <div class="result-container">
+            <div id="message"></div>
+            <div id="result">
+                <!-- <div id="result-heading">RESULT</div> -->
+                <div id="result-images"></div>
+            </div>
+            <div id="congratulations"></div>
+            <div id="sorry"></div>
+        </div>
+        <div class="betting-container">
+            <!-- Your betting options go here -->
+            <div class="row">
+                <div class="bet-amount" onclick="setBet('10Rs')"> <img src="{% static 'DiceApp/images/10.png' %}" alt="Description of Image" width="100" height="100"></div>
+            </div>
+            <div class="row">
+                <div class="bet-amount" onclick="setBet('20Rs')"> <img src="{% static 'DiceApp/images/20.png' %}" alt="Description of Image" width="100" height="100"> </div>
+            </div>
+            <div class="row">
+                <div class="bet-amount" onclick="setBet('30Rs')"> <img src="{% static 'DiceApp/images/30.png' %}" alt="Description of Image" width="100" height="100"> </div>
+            </div>
+            <div class="row">
+                <div class="bet-amount" onclick="setBet('50Rs')"> <img src="{% static 'DiceApp/images/50.png' %}" alt="Description of Image" width="100" height="100"> </div>
+            </div>
+            <div class="row">
+                <div class="bet-amount" onclick="setBet('100Rs')"> <img src="{% static 'DiceApp/images/100.png' %}" alt="Description of Image" width="100" height="100"> </div>
+            </div>
+            <div>
+                <button class="choose-amount-btn" onclick="placeBet()">Choose Amount</button>
+            </div>
+        </div>
+        <div class="selecting-container">
+            <div class="selected-bet">
+                <p>Selected Bet Amount: <span id="selectedBetAmount">None</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="floating-buttons">
+        <button class="btn btn-success start-real-game-btn">Start Real Game</button>
+    </div>
+</body>
+</html>
+
+    <!-- Bootstrap JS and Popper.js CDN -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-vkFHlCflpACpPF4p+3zIjwqXc9D6KE2OHL/z6blO8iCI5tUyXhUjw4/ZKpZ0qWOg" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+        let balance = 100; // Initial virtual currency balance
+
+        function updateBalance(amount) {
+            balance += amount;
+            document.getElementById("walletBalance").textContent = balance;
+        }
+
+        function addMoney() {
+            const amountToAdd = parseInt(prompt("Enter amount to add:"));
+            if (!isNaN(amountToAdd) && amountToAdd > 0) {
+                updateBalance(amountToAdd);
+            } else {
+                alert("Invalid input. Please enter a valid amount.");
+            }
+        }
+        let selectedBet = ''; // Variable to store the selected betting amount
+
+        function setBet(amount) {
+            selectedBet = amount; // Store the selected betting amount
+            // Highlight the selected bet for visual feedback (optional)
+            updateSelectedBetDisplay();
+            const betAmounts = document.querySelectorAll('.bet-amount');
+            betAmounts.forEach((bet) => {
+                bet.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        function placeBet() {
+            function rollDiceAnimation() {
+                const diceElements = document.querySelectorAll('.dice');
+                diceElements.forEach(element => element.classList.add('rotate-animation'));
+
+                setTimeout(() => {
+                    const images = ['lion.png', 'horse.png', 'monkey.png', 'panda.png', 'deer.png', 'elephant.png'];
+                    const resultImages = [];
+
+                    for (let i = 0; i < 6; i++) {
+                        const randomIndex = Math.floor(Math.random() * images.length);
+                        resultImages.push(images[randomIndex]);
+                    }
+
+                    displayResult(resultImages);
+                    checkResult(resultImages);
+                    updateGameHistory(resultImages);
+
+                    // Remove the rotate-animation class after the animation is complete
+                    diceElements.forEach(element => element.classList.remove('rotate-animation'));
+                }, 1000); // Adjust timing if needed
+            }
+
+            if (selectedBet !== '') {
+                if (selectedImagesCount === 0) {
+                    alert('Please select at least one image.');
+                    return;
+                }
+                const prevSelectedBet = selectedBet; // Store the previous selected bet
+                const prevSelectedImages = selectedImages.slice(); // Store the previous selected images
+
+                const betValue = getBetValue(selectedBet);
+                if (balance >= betValue) {
+                    balance -= betValue; // Deduct the chosen betting amount from the balance
+                    document.getElementById('walletBalance').textContent = balance;
+                    isBetPlaced = true;
+
+                    const repeatBet = confirm('You have successfully placed your bet! Do you want to bet again?');
+
+                    if (repeatBet) {
+
+                        selectedBet = prevSelectedBet;
+                        selectedImages = prevSelectedImages;
+                        selectedImagesCount = selectedImages.length;
+                        rollDiceAnimation();
+                    } else {
+                        // User chose not to repeat the bet, roll the dice automatically
+                        rollDiceAnimation();
+                    }
+                } else {
+                    alert("Insufficient balance to place the bet.");
+                }
+            } else {
+                alert("Please choose a betting amount!");
+            }
+        }
+
+        function getBetValue(amount) {
+            switch (amount) {
+                case '10Rs':
+                    return 10;
+                case '20Rs':
+                    return 20;
+                case '30Rs':
+                    return 30;
+                case '50Rs':
+                    return 50;
+                case '100Rs':
+                    return 100;
+                default:
+                    return 0;
+            }
+        }
+        const selectedImages = [];
+        let countdownTime = 20; // Initial countdown time in seconds
+        let selectedImagesCount = 0; // Track the count of selected images
+        let roundNumber = 0;
+        const maxRounds = 10;
+        const gameHistory = [];
+        const initialImages = [
+            'lion.png',
+            'horse.png',
+            'monkey.png',
+            'panda.png',
+            'deer.png',
+            'elephant.png'
+        ];
+
+        function updateGameHistory(result) {
+            roundNumber++;
+            gameHistory.push(result);
+
+            const roundList = document.getElementById('round-list');
+            const listItem = document.createElement('li');
+            listItem.className = 'round-item';
+            listItem.innerHTML = `<span class="round-number">Round ${roundNumber}:</span> ${result.map(image => `<img src="${image}" alt="${image}" class="dice-history">`).join('')}`;
+            roundList.appendChild(listItem);
+
+            if (roundNumber === maxRounds) {
+                document.querySelector('button').setAttribute('disabled', 'true');
+            }
+        }
+
+        function selectImage(imageName, element) {
+            const index = selectedImages.indexOf(imageName);
+            if (index === -1) {
+                selectedImages.push(imageName)
+                element.classList.add('dice-selected');
+                selectedImagesCount++;
+                updateBettingAmount(); // Update the betting amount for each selected image
+            } else {
+                selectedImages.splice(index, 1);
+                element.classList.remove('dice-selected');
+                selectedImagesCount--;
+                updateBettingAmount(); // Update the betting amount when deselecting an image
+
+            }
+            displayMessage();
+        }
+        function updateBettingAmount() {
+            const betAmountElement = document.getElementById('selectedBetAmount');
+            let betValue = 0;
+            
+            switch (selectedImagesCount) {
+                case 1:
+                    betValue = selectedBet;
+                    break;
+                case 2:
+                    betValue = selectedBet;
+                    break;
+                case 3:
+                    betValue = selectedBet;
+                    break;
+                case 4:
+                    betValue = selectedBet;
+                    break;
+                case 5:
+                    betValue = selectedBet;
+                case 6:
+                    betValue = selectedBet;    
+                // Add more cases or customize the logic as needed
+                default:
+                    betValue = 0;
+                    break;
+            }
+
+            selectedBet = `${betValue}Rs`; // Update the selected betting amount
+            betAmountElement.textContent = selectedBet;
+        }
+        function displayMessage() {
+            const messageContainer = document.getElementById('message');
+            const selectedImageNames = selectedImages.map(image => image.split('.')[0]); // Extract names without extensions
+            messageContainer.textContent = selectedImages.length > 0 ?
+                `You selected ${selectedImages.length} image${selectedImages.length > 1 ? 's' : ''}: ${selectedImageNames.join(', ')}.` :
+                '';
+        }
+       
+        function displayResult(resultImages) {
+            const gameContainerImages = document.querySelectorAll('.game-container img');
+            
+            resultImages.forEach((image, index) => {
+                gameContainerImages[index].src = image;
+                gameContainerImages[index].alt = image;
+            });
+            
+        }
+
+        function checkResult(resultImages) {
+            const congratsContainer = document.getElementById('congratulations');
+            const sorryContainer = document.getElementById('sorry');
+
+            congratsContainer.textContent = '';
+            sorryContainer.textContent = '';
+
+            const symbolCounts = {};
+
+            resultImages.forEach(image => {
+                const symbol = image.split('.')[0];
+                symbolCounts[symbol] = (symbolCounts[symbol] || 0) + 1;
+            });
+
+            selectedImages.forEach(selectedImage => {
+                const selectedSymbol = selectedImage.split('.')[0];
+                const selectedSymbolCount = symbolCounts[selectedSymbol] || 0;
+
+                if (selectedSymbolCount >= 2) {
+                    const multiplier = selectedSymbolCount === 2 ? 2 : selectedSymbolCount;
+                    const symbolMessage = document.createElement('p');
+                    symbolMessage.textContent = `Congratulations! You got ${selectedSymbolCount} ${selectedSymbol}s.`;
+                    congratsContainer.appendChild(symbolMessage);
+                    const betValue = getBetValue(selectedBet);
+                    updateBalance(betValue * multiplier);
+
+                }
+                else if (selectedSymbolCount >= 3) {
+                    const symbolMessage = document.createElement('p');
+                    const multiplier = selectedSymbolCount === 3 ? 3 : selectedSymbolCount;
+                    symbolMessage.textContent = `Congratulations! You got ${selectedSymbolCount} ${selectedSymbol}s.`;
+                    congratsContainer.appendChild(symbolMessage);
+                    const betValue = getBetValue(selectedBet);
+                    updateBalance(betValue * multiplier);
+                }
+                else if (selectedSymbolCount >= 4) {
+                    const symbolMessage = document.createElement('p');
+                    const multiplier = selectedSymbolCount === 4 ? 4 : selectedSymbolCount;
+                    symbolMessage.textContent = `Congratulations! You got ${selectedSymbolCount} ${selectedSymbol}s.`;
+                    congratsContainer.appendChild(symbolMessage);
+                    const betValue = getBetValue(selectedBet);
+                    updateBalance(betValue * multiplier);
+                }
+                else if (selectedSymbolCount >= 5) {
+                    const symbolMessage = document.createElement('p');
+                    const multiplier = selectedSymbolCount === 5 ? 5 : selectedSymbolCount;
+                    symbolMessage.textContent = `Congratulations! You got  ${selectedSymbolCount} ${selectedSymbol}s.`;
+                    congratsContainer.appendChild(symbolMessage);
+                    const betValue = getBetValue(selectedBet);
+                    updateBalance(betValue * multiplier);
+                }
+                else if (selectedSymbolCount >= 6) {
+                    const symbolMessage = document.createElement('p');
+                    const multiplier = selectedSymbolCount === 6 ? 6 : selectedSymbolCount;
+                    symbolMessage.textContent = `Congratulations! You got ${selectedSymbolCount} ${selectedSymbol}s.`;
+                    congratsContainer.appendChild(symbolMessage);
+                    const betValue = getBetValue(selectedBet);
+                    updateBalance(betValue * multiplier);
+                }
+                else {
+                    const symbolMessage = document.createElement('p');
+                    symbolMessage.textContent = `Better Luck Next time! You did not get more than 1 ${selectedSymbol}s.`;
+                    sorryContainer.appendChild(symbolMessage);
+                }
+            });
+
+            // Start a new game after 20 seconds
+            setTimeout(() => {
+                const gameContainerImages = document.querySelectorAll('.game-container img');
+                gameContainerImages.forEach((image, index) => {
+                    image.src = initialImages[index];
+                    image.alt = initialImages[index];
+                });
+                resetGame();
+                alert('A new game will start.');
+            }, 20000);
+        }
+
+        function resetGame() {
+            selectedImages.length = 0; // Clear selected images
+            const diceElements = document.querySelectorAll('.dice');
+            diceElements.forEach(element => element.classList.remove('dice-selected'));
+            const messageContainer = document.getElementById('message');
+            messageContainer.textContent = '';
+            const resultContainer = document.getElementById('result-images');
+            resultContainer.innerHTML = '';
+            const congratsContainer = document.getElementById('congratulations');
+            const sorryContainer = document.getElementById('sorry');
+            congratsContainer.textContent = '';
+            sorryContainer.textContent = '';
+            // Reset countdown time
+            countdownTime = 20;
+            updateCountdownDisplay();
+            selectedBet = ''; // Reset selected betting amount
+            // updateSelectedBetDisplay(); // Update the displayed selected betting amount
+            // isBetPlaced = false; // Reset the betting state
+            selectedImagesCount = 0; // Reset the selected image count
+            updateBettingAmount(); // Reset the betting amount display
+        }
+        function updateSelectedBetDisplay() {
+            const selectedBetAmountElement = document.getElementById('selectedBetAmount');
+            selectedBetAmountElement.textContent = selectedBet || 'None'; // Display 'None' if no bet selected
+        }
+        function updateCountdownDisplay() {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.textContent = `Time Left: ${countdownTime}s`;
+        }
+       // Countdown timer function
+        function startCountdown() {
+            updateCountdownDisplay();
+            const countdownInterval = setInterval(() => {
+                countdownTime--;
+                updateCountdownDisplay();
+
+                if (countdownTime === 0) {
+                    clearInterval(countdownInterval);
+                    resetGame();
+                    rollDice(); // Start a new game after the countdown reaches zero
+                }
+            }, 1000);
+        }
+        // Start the countdown when the page loads
+        // document.addEventListener('DOMContentLoaded', startCountdown);
+    </script>
+</body>
+
+</html>
