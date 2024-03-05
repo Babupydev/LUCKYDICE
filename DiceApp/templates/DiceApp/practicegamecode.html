@@ -1,5 +1,4 @@
-{% load static %} 
-<!DOCTYPE html> 
+<!DOCTYPE html> {% load static %}
 <html lang="en">
 
 <head>
@@ -7,211 +6,241 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucky Dice</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Lucky Dice Game</title>
-
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
     <style>
         body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f0f0;
-}
-
-.container {
-    max-width: 800px; /* Adjusted max-width */
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.wallet-container {
-    background: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    color: white;
-    margin-bottom: 20px;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-}
-
-.table th {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    text-align: center;
-}
-
-.table td {
-    padding: 8px;
-    color: #333;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.game-info {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-h1 {
-    color: #000;
-    font-size: 2em;
-    margin: 20px 0;
-}
-
-.countdown-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-#countdown {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #4caf50;
-    margin-bottom: 10px;
-    animation: pulse 1s infinite;
-}
-
-.game-history-container {
-    display: flex;
-    flex-direction: column;
-}
-
-#game-history {
-    padding: 20px;
-    border-radius: 5px;
-    text-align: center;
-    color: red;
-}
-
-#game-history h2 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #4caf50;
-    font-size: 1.5em;
-}
-
-#round-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-/* Add your remaining styles here */
-
-/* ... */
-
-.floating-buttons {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
-.practice-game-btn {
-    margin-right: 10px;
-}
-
-    
-        .round-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 10px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            justify-content: center;
         }
-    
-        .round-number {
+        
+        #wallet-container {
+            background-color: #08AEEA;
+            background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 30px;
+            width: 250px;
+            height: 200px;
+            color: white;
+        }
+        
+        #walletBalance {
+            font-size: 20px;
+        }
+        
+        h1 {
+            color: #000;
+            margin-right: 300px;
+            font-size: 70px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        #countdown.animate {
+            animation: pulse 1s infinite;
+        }
+        
+        #add {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4c53af;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        
+        #add:hover {
+            background-color: #4CAF50;
+        }
+        
+        .col-4,
+        .col-8 {
+            display: inline-block;
+            vertical-align: top;
+            flex: 1;
+        }
+        
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: white;
+            /* Text color for better visibility on the background */
+        }
+        
+        th {
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent background for the table header */
+            padding: 10px;
+            text-align: center;
+        }
+        
+        td {
+            padding: 8px;
+            color: #333;
+            font-size: 20px;
             font-weight: bold;
-            margin-right: 10px;
         }
-    
-        .dice-history {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-            border: 2px solid #4caf50;
-            border-radius: 4px;
+        
+        #roll {
+            padding: 10px;
+            font-size: 18px;
+            width: 100px;
+            background-color: #af4c54;
+            /* Green color for the button */
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: auto;
+            transition: background-color 0.3s ease;
         }
-    
+        
+        #roll:hover {
+            background-color: #45a049;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .rotate-animation {
+            animation: rotate 0.1s linear infinite;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
         .game-container {
-            width: 60%;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
+            width: 35%;
+            height: 50%;
             gap: 10px;
             margin-top: 20px;
-            margin-left: 80px;
+            margin: auto;
             border: 2px solid red;
-            padding: 20px;
+            padding: 30px;
             background-color: #DAF7A6;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             animation: fadeIn 1s ease-in-out;
         }
-    
+        
         .dice {
-            width: 80px;
-            height: 80px;
-            margin: 5px;
+            width: 100px;
+            height: 100px;
+            margin: 10px;
             border: 2px solid #333;
             cursor: pointer;
             border-radius: 8px;
             overflow: hidden;
             transition: transform 0.3s ease-in-out;
         }
-    
+        
         .dice-selected {
-            box-shadow: 0 0 8px red;
+            box-shadow: 0 0 10px red;
         }
-    
+        
         #message {
             margin-top: 10px;
             color: #4caf50;
             font-weight: bold;
             text-align: center;
-            font-size: 1.2em;
         }
-    
+        
         #result {
             margin-top: 20px;
             text-align: center;
             color: #4caf50;
-            font-size: 1.2em;
         }
-    
+        
+        #result-heading {
+            font-weight: bold;
+        }
+        
         #result-images {
             display: flex;
             justify-content: center;
         }
-    
+        
         #congratulations,
         #sorry {
             margin-top: 20px;
             font-weight: bold;
             text-align: center;
             color: #4caf50;
-            font-size: 1.2em;
         }
-    
+        
         .betting-container {
+            height: auto;
+            width: auto;
             display: flex;
             justify-content: space-around;
             align-items: center;
             margin-top: 5px;
+            float: right;
+            margin-right: 200px;
+            padding-right: 0;
             text-align: center;
-            gap: 10px;
+            gap: 30px;
         }
-    
+        
         .bet-amount:hover {
             transform: scale(1.1);
         }
-    
+        
         .choose-amount-btn {
-            padding: 10px 15px;
+            padding: 10px 20px;
             font-size: 1em;
             background-color: #4CAF50;
             color: white;
@@ -220,130 +249,194 @@ h1 {
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
         }
-    
+        
         .choose-amount-btn:hover {
             background-color: #455aa0;
+            /* Darker green */
         }
-    
+        
         .bet-amount:hover {
             border: 1px solid #ffd900;
+            /*Change the border color for selected bet*/
             transform: scale(1.1);
         }
-    
+        
         .bet-amount {
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: bold;
-            font-size: 1em;
+            font-size: 1.3em;
             border-radius: 10%;
+            /* Creates a circle */
+            border: none;
             border: 1px solid #000;
             cursor: pointer;
             transition: transform 0.8s ease-in-out;
         }
-    
+        
         .selected {
             border-color: #45A049 !important;
+            /* Highlight selected bet */
         }
-    
+        
         .selected-bet {
             margin-top: 20px;
             text-align: center;
-            font-size: 1em;
+            font-size: 18px;
             color: #333;
             color: #4caf50;
             font-weight: bold;
+            margin-right: auto;
         }
-    
+        
         .selected-bet p {
             margin: 0;
         }
-    
+        
         .selected-bet span {
             font-weight: bold;
             color: #4CAF50;
         }
-    
-        @media (max-width: 768px) {
-            .game-container {
-                width: 90%;
-            }
+        
+        .container-fluid {
+            padding-top: 20px;
+            /* Add some top padding for better spacing */
+            padding-left: 500px;
         }
-    
-        @media (max-width: 576px) {
-            .game-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        
+        #countdown {
+            font-size: 40px;
+            font-weight: bold;
+            color: #4caf50;
+            margin-bottom: 10px;
+            /* Space between Time Left and Game History */
+            margin-top: 20px;
+            margin-left: 40px;
+            animation: pulse 1s infinite;
+        }
+        
+        #game-history {
+            padding: 20px;
+            padding-left: 100px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+            color: red;
+        }
+        
+        #game-history h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #4caf50;
+            font-size: 30px;
+        }
+        
+        #round-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .round-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .round-number {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .dice-history {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border: 2px solid #4caf50;
+            border-radius: 4px;
         }
     </style>
-    
-    
-    
 </head>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucky Dice Game</title>
-    <link rel="stylesheet" href="your-stylesheet.css">
-</head>
+
 <body>
+    <br><br>
     <div class="container">
-        <div class="wallet-container card">
-            <!-- Wallet content -->
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th colspan="2">Virtual Wallet</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Balance:</td>
-                        <td><span id="walletBalance">100</span></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button class="btn btn-primary" id="add" onclick="addMoney()">Add Money</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card" id="wallet-container">
+                    <!-- Wallet content -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2">Virtual Wallet</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Balance:</td>
+                                <td><span id="walletBalance">100</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button id="add" onclick="addMoney()">Add Money</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h1 class="text-center">Lucky Dice Game</h1>
+                <!-- Other content related to the game -->
+            </div>
         </div>
-        <div class="game-info">
-            <h1 class="text-center">Lucky Dice Game</h1>
-            <div class="countdown-container">
-                <div id="countdown" style="opacity: 0%;">Time Left: 20s</div>
-                <div id="game-history-container">
-                    <!-- Right container for Game History -->
-                    <div id="game-history">
-                        <h2>Game History</h2>
-                        <ul id="round-list"></ul>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="countdown" style="opacity: 0%;">Time Left: 20s</div>
+                </div>
+                <div class="col-md-6">
+                    <div id="game-history-container">
+                        <!-- Right container for Game History -->
+                        <div id="game-history">
+                            <h2>Game History</h2>
+                            <ul id="round-list"></ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="game-container">
-            <!-- Your dice images go here -->
-            <img id="img1" src="{% static 'DiceApp/images/lion.png' %}" alt="lion" class="dice" onclick="selectImage('lion.png', this)">
-            <img id="img2" src="{% static 'DiceApp/images/horse.png' %}" alt="horse" class="dice" onclick="selectImage('horse.png', this)">
-            <img id="img2" src="{% static 'DiceApp/images/monkey.png' %}" alt="monkey" class="dice" onclick="selectImage('monkey.png', this)">
-            <img id="img3" src="{% static 'DiceApp/images/panda.png' %}" alt="panda" class="dice" onclick="selectImage('panda.png', this)">
-            <img id="img4" src="{% static 'DiceApp/images/deer.png' %}" alt="deer" class="dice" onclick="selectImage('deer.png', this)">
-            <img id="img5" src="{% static 'DiceApp/images/elephant.png' %}" alt="elephant" class="dice" onclick="selectImage('elephant.png', this)">
+            <!-- Make sure the paths are correct -->
+            <img src="{% static 'DiceApp/images/lion.png' %}" alt="lion" class="dice" onclick="selectImage('lion.png', this)">
+            <img src="{% static 'DiceApp/images/horse.png' %}" alt="horse" class="dice" onclick="selectImage('horse.png', this)">
+            <img src="{% static 'DiceApp/images/monkey.png' %}" alt="monkey" class="dice" onclick="selectImage('monkey.png', this)">
+            <img src="{% static 'DiceApp/images/panda.png' %}" alt="panda" class="dice" onclick="selectImage('panda.png', this)">
+            <img src="{% static 'DiceApp/images/deer.png' %}" alt="deer" class="dice" onclick="selectImage('deer.png', this)">
+            <img src="{% static 'DiceApp/images/elephant.png' %}" alt="elephant" class="dice" onclick="selectImage('elephant.png', this)">
+
         </div>
-        <div class="result-container">
-            <div id="message"></div>
-            <div id="result">
-                <!-- <div id="result-heading">RESULT</div> -->
-                <div id="result-images"></div>
+        <div class="container">
+            <div class="row">
+                <div id="message"></div>
             </div>
-            <div id="congratulations"></div>
-            <div id="sorry"></div>
+            <div class="row">
+                <div id="result">
+                    <!-- <div id="result-heading">RESULT</div> -->
+                    <div id="result-images"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="congratulations"></div>
+            </div>
+            <div class="row">
+                <div id="sorry"></div>
+            </div>
         </div>
+        <br>
         <div class="betting-container">
-            <!-- Your betting options go here -->
             <div class="row">
                 <div class="bet-amount" onclick="setBet('10Rs')"> <img src="{% static 'DiceApp/images/10.png' %}" alt="Description of Image" width="100" height="100"></div>
             </div>
@@ -359,27 +452,22 @@ h1 {
             <div class="row">
                 <div class="bet-amount" onclick="setBet('100Rs')"> <img src="{% static 'DiceApp/images/100.png' %}" alt="Description of Image" width="100" height="100"> </div>
             </div>
-            <div>
+            <br>
+            <div class="row">
                 <button class="choose-amount-btn" onclick="placeBet()">Choose Amount</button>
             </div>
         </div>
+        <br>
         <div class="selecting-container">
-            <div class="selected-bet">
-                <p>Selected Bet Amount: <span id="selectedBetAmount">None</span></p>
+            <div class="row">
+                <div class="selected-bet">
+                    <p>Selected Bet Amount: <span id="selectedBetAmount">None</span></p>
+                </div>
             </div>
+
         </div>
     </div>
-    <div class="floating-buttons">
-        <button class="btn btn-success start-real-game-btn">Start Real Game</button>
-    </div>
-</body>
-</html>
-
-    <!-- Bootstrap JS and Popper.js CDN -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-vkFHlCflpACpPF4p+3zIjwqXc9D6KE2OHL/z6blO8iCI5tUyXhUjw4/ZKpZ0qWOg" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+    <br>
     <script>
         let balance = 100; // Initial virtual currency balance
 
@@ -567,15 +655,16 @@ h1 {
         }
        
         function displayResult(resultImages) {
-            const gameContainerImages = document.querySelectorAll('.game-container img');
-            
+    
+            const gameContainerImages = document.querySelectorAll('.game-container img');        
+            console.log("Result Images:", resultImages); // Log resultImages array to console    
             resultImages.forEach((image, index) => {
-                gameContainerImages[index].src = image;
-                gameContainerImages[index].alt = image;
+        
+                console.log("Image URL:", image); // Log each image URL to console        
+                gameContainerImages[index].src = image;        
+                gameContainerImages[index].alt = image;    
             });
-            
         }
-
         function checkResult(resultImages) {
             const congratsContainer = document.getElementById('congratulations');
             const sorryContainer = document.getElementById('sorry');
