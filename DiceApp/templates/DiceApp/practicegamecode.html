@@ -503,7 +503,14 @@
                 diceElements.forEach(element => element.classList.add('rotate-animation'));
 
                 setTimeout(() => {
-                    const images = ['lion.png', 'horse.png', 'monkey.png', 'panda.png', 'deer.png', 'elephant.png'];
+                    const images = [
+                        '{% static "DiceApp/images/lion.png" %}',
+                        '{% static "DiceApp/images/horse.png" %}',
+                        '{% static "DiceApp/images/monkey.png" %}',
+                        '{% static "DiceApp/images/panda.png" %}',
+                        '{% static "DiceApp/images/deer.png" %}',
+                        '{% static "DiceApp/images/elephant.png" %}'
+                    ];
                     const resultImages = [];
 
                     for (let i = 0; i < 6; i++) {

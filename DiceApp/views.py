@@ -51,24 +51,6 @@ def reset_password(request):
 def reset_password_success(request):
     return reset_password_success(request)
 
-# class register(View):
-#     def get(self, request):
-#         form = UserregistrationForm()
-#         return render(request, "DiceApp/registration.html", locals())
-
-#     def post(self, request):
-#         form = UserregistrationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Congratulations ! user register Successfully")
-#         else:
-#             messages.warning(request, "invalid input Data")
-#         return render(request, "DiceApp/registration.html", locals())
-
-
-# def user_login(request):
-#     return render(request, "DiceApp/login.html")
-
 # User-Profile section
 
 class ProfileView(View):
@@ -121,8 +103,6 @@ class User_profile(View):
             )
         else:
             return render(request, "DiceApp/not_authenticated.html", locals())
-
-
 # For User Profile-setting
 
 class ProfileSettingsView(View):
@@ -212,9 +192,6 @@ def view_all_deposits(request):
         deposit_messages = paginator.page(paginator.num_pages)
 
     return render(request, 'DiceApp/all_deposits.html', {'deposit_messages': deposit_messages})
-# def view_deposit_details(request):
-#     deposit_messages = messages.get_messages(request)
-#     return render(request, 'DiceApp/viewdetails.html', {'deposit_messages': deposit_messages})
 
 def GameHistory(request):
     return render(request, "DiceApp/game-history.html")
